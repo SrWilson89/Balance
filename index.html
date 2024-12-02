@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Balance de Gastos e Ingresos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        #transaction-form {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        input, select, button {
+            width: 100%;
+            margin: 10px 0;
+            padding: 8px;
+        }
+        #transactions-list {
+            margin-top: 20px;
+        }
+        .transaction {
+            display: flex;
+            justify-content: space-between;
+            background-color: white;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .ingreso { color: green; }
+        .gasto { color: red; }
+        #summary {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div id="transaction-form">
+        <h2>Registro de Gastos e Ingresos</h2>
+        <input type="text" id="description" placeholder="Descripción" required>
+        <input type="number" id="amount" placeholder="Monto" required min="0">
+        <select id="type">
+            <option value="ingreso">Ingreso</option>
+            <option value="gasto">Gasto</option>
+        </select>
+        <button onclick="addTransaction()">Agregar Transacción</button>
+    </div>
+
+    <div id="summary">
+        <span>Ingresos Total: <span id="total-ingresos">0</span></span>
+        <span>Gastos Total: <span id="total-gastos">0</span></span>
+        <span>Balance: <span id="balance">0</span></span>
+    </div>
+
+    <div id="transactions-list"></div>
+
+    <script>
+        // Verifica si localStorage está disponible
+        if (typeof(Storage) === "undefined") {
+            alert("Tu navegador no soporta localStorage, lo que puede afectar la persistencia de los datos.");
+        }
+
+        let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+
+        function addTransaction() {
+            const description = document.getElementById('description').value;
+            const amount = parseFloat(document.getElementById('amount').value);
+            const type = document.getElementById('type').value;
+
+            if (!description || isNaN(amount) || amount <= 0) {
+                alert("Por favor, ingresa una descripción válida y un monto mayor a 0.");
+                return;
+            }
+
+            const transaction = { description, amount, type, id: Date.now() };
+            transactions.push(transaction);
+            updateLocalStorage();
+            renderTransactions();
+            updateSummary();
+            clearForm();
+        }
+
+        function renderTransactions() {
+            const list = document.getElementById('transactions-list');
+            list.innerHTML = '';
+            transactions.forEach(transaction => {
+                const div = document.createElement('div');
+                div.classList.add('transaction', transaction.type);
+                div.innerHTML = `
+                    <span>${transaction.description}</span>
+                    <span>$${transaction.amount.toFixed(2)}</span>
+                    <button onclick="deleteTransaction(${transaction.id})">Eliminar</button>
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        function deleteTransaction(id) {
+            transactions = transactions.filter(t => t.id !== id);
+            updateLocalStorage();
+            renderTransactions();
+            updateSummary();
+        }
+
+        function updateSummary() {
+            const totalIngresos = transactions
+                .filter(t => t.type === 'ingreso')
+                .reduce((sum, t) => sum + t.amount, 0);
+            const totalGastos = transactions
+                .filter(t => t.type === 'gasto')
+                .reduce((sum, t) => sum + t.amount, 0);
+            const balance = totalIngresos - totalGastos;
+
+            document.getElementById('total-ingresos').textContent = totalIngresos.toFixed(2);
+            document.getElementById('total-gastos').textContent = totalGastos.toFixed(2);
+            document.getElementById('balance').textContent = balance.toFixed(2);
+        }
+
+        function updateLocalStorage() {
+            localStorage.setItem('transactions', JSON.stringify(transactions));
+        }
+
+        function clearForm() {
+            document.getElementById('description').value = '';
+            document.getElementById('amount').value = '';
+        }
+
+        // Renderizado inicial
+        renderTransactions();
+        updateSummary();
+    </script>
+</body>
+</html>
