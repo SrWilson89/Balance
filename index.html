@@ -2,74 +2,206 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Balance de Gastos e Ingresos</title>
     <style>
+        /* Estilos globales */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            max-width: 600px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: #f4f4f4;
+            font-family: 'Arial', sans-serif;
+            background-color: #f3f3f3;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #333;
         }
-        #transaction-form {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        input, select, button {
+
+        .container {
             width: 100%;
-            margin: 10px 0;
-            padding: 8px;
+            max-width: 600px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            padding: 20px;
+            text-align: center;
         }
+
+        h1 {
+            font-size: 2rem;
+            color: #4CAF50;
+            margin-bottom: 20px;
+        }
+
+        /* Estilos para el formulario */
+        .form-group {
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .form-group label {
+            font-size: 1rem;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        .form-group input, .form-group select, .form-group button {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            margin-top: 5px;
+        }
+
+        .form-group input, .form-group select {
+            background-color: #f9f9f9;
+        }
+
+        .form-group button {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .form-group button:hover {
+            background-color: #45a049;
+        }
+
+        /* Estilos de resumen */
+        #summary {
+            margin-top: 30px;
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            color: #333;
+            background-color: #f9f9f9;
+            padding: 12px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        #summary span {
+            font-size: 1.1rem;
+        }
+
+        /* Estilos de la lista de transacciones */
         #transactions-list {
             margin-top: 20px;
         }
+
         .transaction {
             display: flex;
             justify-content: space-between;
-            background-color: white;
-            padding: 10px;
+            align-items: center;
+            padding: 12px;
+            background-color: #f9f9f9;
             margin-bottom: 10px;
-            border-radius: 4px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
-        .ingreso { color: green; }
-        .gasto { color: red; }
-        #summary {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
+
+        .transaction .description {
             font-weight: bold;
+            color: #555;
+        }
+
+        .transaction .amount {
+            font-size: 1.1rem;
+        }
+
+        .ingreso .amount {
+            color: green;
+        }
+
+        .gasto .amount {
+            color: red;
+        }
+
+        .transaction button {
+            padding: 6px 12px;
+            background-color: #f44336;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .transaction button:hover {
+            background-color: #e53935;
+        }
+
+        /* Responsividad */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .form-group input,
+            .form-group select,
+            .form-group button {
+                font-size: 0.9rem;
+            }
+
+            #summary {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .transaction {
+                flex-direction: column;
+                text-align: center;
+            }
         }
     </style>
 </head>
 <body>
-    <div id="transaction-form">
-        <h2>Registro de Gastos e Ingresos</h2>
-        <input type="text" id="description" placeholder="Descripción" required>
-        <input type="number" id="amount" placeholder="Monto" required min="0">
-        <select id="type">
-            <option value="ingreso">Ingreso</option>
-            <option value="gasto">Gasto</option>
-        </select>
-        <button onclick="addTransaction()">Agregar Transacción</button>
-    </div>
+    <div class="container">
+        <h1>Balance de Gastos e Ingresos</h1>
+        <div id="transaction-form">
+            <div class="form-group">
+                <label for="description">Descripción</label>
+                <input type="text" id="description" placeholder="Descripción">
+            </div>
+            <div class="form-group">
+                <label for="amount">Monto</label>
+                <input type="number" id="amount" placeholder="Monto">
+            </div>
+            <div class="form-group">
+                <label for="type">Tipo de transacción</label>
+                <select id="type">
+                    <option value="ingreso">Ingreso</option>
+                    <option value="gasto">Gasto</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <button onclick="addTransaction()">Agregar Transacción</button>
+            </div>
+        </div>
 
-    <div id="summary">
-        <span>Ingresos Total: <span id="total-ingresos">0</span></span>
-        <span>Gastos Total: <span id="total-gastos">0</span></span>
-        <span>Balance: <span id="balance">0</span></span>
-    </div>
+        <div id="summary">
+            <span>Ingresos Total: <span id="total-ingresos">0</span></span>
+            <span>Gastos Total: <span id="total-gastos">0</span></span>
+            <span>Balance: <span id="balance">0</span></span>
+        </div>
 
-    <div id="transactions-list"></div>
+        <div id="transactions-list"></div>
+    </div>
 
     <script>
-        // Verifica si localStorage está disponible
-        if (typeof(Storage) === "undefined") {
-            alert("Tu navegador no soporta localStorage, lo que puede afectar la persistencia de los datos.");
-        }
-
         let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
 
         function addTransaction() {
@@ -97,8 +229,8 @@
                 const div = document.createElement('div');
                 div.classList.add('transaction', transaction.type);
                 div.innerHTML = `
-                    <span>${transaction.description}</span>
-                    <span>$${transaction.amount.toFixed(2)}</span>
+                    <span class="description">${transaction.description}</span>
+                    <span class="amount">$${transaction.amount.toFixed(2)}</span>
                     <button onclick="deleteTransaction(${transaction.id})">Eliminar</button>
                 `;
                 list.appendChild(div);
