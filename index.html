@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Balance de Gastos e Ingresos</title>
     <style>
-        /* Estilos globales */
         * {
             margin: 0;
             padding: 0;
@@ -14,12 +13,13 @@
 
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #f3f3f3;
+            background-color: #E3F2FD;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             color: #333;
+            padding: 20px;
         }
 
         .container {
@@ -35,11 +35,10 @@
 
         h1 {
             font-size: 2rem;
-            color: #4CAF50;
+            color: #1976D2;
             margin-bottom: 20px;
         }
 
-        /* Estilos para el formulario */
         .form-group {
             margin-bottom: 15px;
             display: flex;
@@ -50,7 +49,7 @@
         .form-group label {
             font-size: 1rem;
             margin-bottom: 5px;
-            color: #555;
+            color: #1976D2;
         }
 
         .form-group input, .form-group select, .form-group button {
@@ -58,33 +57,33 @@
             padding: 12px;
             font-size: 1rem;
             border-radius: 6px;
-            border: 1px solid #ddd;
+            border: 1px solid #BBDEFB;
             margin-top: 5px;
         }
 
         .form-group input, .form-group select {
-            background-color: #f9f9f9;
+            background-color: #F8FBFE;
         }
 
         .form-group button {
-            background-color: #4CAF50;
+            background-color: #1976D2;
             color: white;
             cursor: pointer;
             transition: background-color 0.3s;
+            border: none;
         }
 
         .form-group button:hover {
-            background-color: #45a049;
+            background-color: #1565C0;
         }
 
-        /* Estilos de resumen */
         #summary {
             margin-top: 30px;
             display: flex;
-            justify-content: flex-end;
+            justify-content: space-between;
             font-weight: bold;
             color: #333;
-            background-color: #f9f9f9;
+            background-color: #F8FBFE;
             padding: 12px;
             border-radius: 8px;
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
@@ -92,10 +91,8 @@
 
         #summary span {
             font-size: 1.1rem;
-            margin-left: 20px;
         }
 
-        /* Estilos de la lista de transacciones */
         #transactions-list {
             margin-top: 20px;
         }
@@ -105,7 +102,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 12px;
-            background-color: #f9f9f9;
+            background-color: #F8FBFE;
             margin-bottom: 10px;
             border-radius: 6px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -113,7 +110,7 @@
 
         .transaction .description {
             font-weight: bold;
-            color: #555;
+            color: #1976D2;
         }
 
         .transaction .amount {
@@ -121,16 +118,16 @@
         }
 
         .ingreso .amount {
-            color: green;
+            color: #2E7D32;
         }
 
         .gasto .amount {
-            color: red;
+            color: #C62828;
         }
 
         .transaction button {
             padding: 6px 12px;
-            background-color: #f44336;
+            background-color: #C62828;
             color: white;
             border: none;
             border-radius: 6px;
@@ -138,13 +135,13 @@
         }
 
         .transaction button:hover {
-            background-color: #e53935;
+            background-color: #B71C1C;
         }
 
-        /* Responsividad */
         @media (max-width: 768px) {
             .container {
                 padding: 15px;
+                margin: 10px;
             }
 
             h1 {
@@ -159,11 +156,13 @@
 
             #summary {
                 flex-direction: column;
-                text-align: center;
+                gap: 10px;
+                text-align: left;
             }
 
             .transaction {
                 flex-direction: column;
+                gap: 10px;
                 text-align: center;
             }
         }
@@ -194,9 +193,9 @@
         </div>
 
         <div id="summary">
-            <span>Ingresos Total: <span id="total-ingresos">0</span></span>
-            <span>Gastos Total: <span id="total-gastos">0</span></span>
-            <span>Balance: <span id="balance">0</span></span>
+            <span>Ingresos Total: $<span id="total-ingresos">0</span></span>
+            <span>Gastos Total: $<span id="total-gastos">0</span></span>
+            <span>Balance: $<span id="balance">0</span></span>
         </div>
 
         <div id="transactions-list"></div>
@@ -268,7 +267,6 @@
             document.getElementById('amount').value = '';
         }
 
-        // Renderizado inicial
         renderTransactions();
         updateSummary();
     </script>
